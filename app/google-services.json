@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "192023444845",
+    "firebase_url": "https://vision-1-394a7.firebaseio.com",
+    "project_id": "vision-1-394a7",
+    "storage_bucket": "vision-1-394a7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:192023444845:android:67a317156d7671a116ee64",
+        "android_client_info": {
+          "package_name": "com.example.signupapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "192023444845-vlp296rvndo61k7rd8obq2ejcjoo0k98.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2z_4wQxctXCTFeX-aS8pevn57gFORIHA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "192023444845-vlp296rvndo61k7rd8obq2ejcjoo0k98.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

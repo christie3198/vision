@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="25dp">
+
+    <Button
+        android:id="@+id/btnChooseImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_background"
+        android:text="  Choose Image  "
+        android:textColor="@color/colorWhite" />
+
+    <EditText
+        android:id="@+id/edChooseImageFile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_toEndOf="@+id/btnChooseImage"
+        android:layout_toRightOf="@+id/btnChooseImage"
+        android:hint="Enter File/Image Name" />
+
+    <ImageView
+        android:id="@+id/imageViewer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/progressBar"
+        android:layout_below="@+id/edChooseImageFile"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnImageUpload"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="10dp" />
+
+    <Button
+        android:id="@+id/btnImageUpload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button_background"
+        android:text="Upload"
+        android:textColor="@color/colorWhite" />
+
+    <TextView
+        android:id="@+id/tvShowUploadedImages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btnImageUpload"
+        android:layout_alignBottom="@+id/btnImageUpload"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_toStartOf="@+id/btnImageUpload"
+        android:layout_toLeftOf="@+id/btnImageUpload"
+        android:gravity="center"
+        android:text="Show Uploads"
+        android:textSize="16sp" />
+</RelativeLayout>
