@@ -7,7 +7,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -15,12 +19,21 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.signupapp.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -30,6 +43,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -44,6 +58,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     GoogleMap mapCurr;
     SupportMapFragment mapFragment;
     SearchView searchView;
+
+    LocationRequest locationRequest;
+    Marker currLocationMarker;
 
     FloatingActionButton btnCurrLocation;
     Location currentLocation;
@@ -66,18 +83,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 String location = searchView.getQuery().toString();
                 List<Address> addressList = null;
 
-                if (location != null || !location.equals("")){
+                if (location != null || !location.equals("")) {
                     Geocoder geocoder = new Geocoder(MapsActivity.this);
                     try {
                         addressList = geocoder.getFromLocationName(location, 1);
-                    }catch(IOException e){
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                     Address address = addressList.get(0);
-                    LatLng latilngi = new LatLng(address.getLatitude(),address.getLongitude());
+                    LatLng latilngi = new LatLng(address.getLatitude(), address.getLongitude());
                     MarkerOptions markerOptions = new MarkerOptions().position(latilngi).title(location);
                     mapCurr.addMarker(markerOptions);
-                    mapCurr.animateCamera(CameraUpdateFactory.newLatLngZoom(latilngi, 21));
+                    mapCurr.animateCamera(CameraUpdateFactory.newLatLngZoom(latilngi, 8));
                 }
                 return false;
             }
@@ -98,6 +115,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(MapsActivity.this);
     }
 
+
+    @SuppressLint("NewApi")
     private void fetchLastLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED &&
@@ -149,11 +168,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case REQUEST_CODE:
+            case REQUEST_CODE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     fetchLastLocation();
                 }
                 break;
+            }
+
+
+        }
+    }
+
+    public void onPause() {
+        super.onPause();
+
+        //stop location updates when Activity is no longer active
+        if (fusedLocationProviderClient != null) {
+            fusedLocationProviderClient.removeLocationUpdates(locationCallback);
         }
     }
 
@@ -165,17 +196,59 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mapCurr.clear(); //clear old markers
 
-        /*LatLng latlng  = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-        CameraPosition googlePlex = CameraPosition.builder()
-                .target(latlng)
-                .zoom(20)
-                .bearing(0)
-                .tilt(45)
-                .build();
+        /*locationRequest = new LocationRequest();
+        locationRequest.setInterval(120000); // two minute interval
+        locationRequest.setFastestInterval(120000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
-        MarkerOptions markerOptions = new MarkerOptions().position(latlng).title("You are here!!");
-        mapCurr.addMarker(markerOptions);
-        mapCurr.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), 10000, null);*/
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                //Location Permission already granted
+                fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
+                mapCurr.setMyLocationEnabled(true);
+            } else {
+                //Request Location Permission
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    // Should we show an explanation?
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                            Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                        // Show an explanation to the user *asynchronously* -- don't block
+                        // this thread waiting for the user's response! After the user
+                        // sees the explanation, try again to request the permission.
+                        new AlertDialog.Builder(this)
+                                .setTitle("Location Permission Needed")
+                                .setMessage("This app needs the Location permission, please accept to use location functionality")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        //Prompt the user once explanation has been shown
+                                        ActivityCompat.requestPermissions(MapsActivity.this,
+                                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                                REQUEST_CODE );
+                                    }
+                                })
+                                .create()
+                                .show();
+
+
+                    } else {
+                        // No explanation needed, we can request the permission.
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                REQUEST_CODE );
+                    }
+                }
+            }
+        }
+        else {
+            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
+            mapCurr.setMyLocationEnabled(true);
+        }*/
 
         mapCurr.addMarker(new MarkerOptions()
                 .position(new LatLng(19.081300, 72.888600))
@@ -229,11 +302,69 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .title("Vidyavihar Station Road")
                 .icon(bitmapDescriptorFromVector(MapsActivity.this, R.drawable.vidyavihar)));
     }
+
+    LocationCallback locationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            List<Location> locationList = locationResult.getLocations();
+            if (locationList.size() > 0) {
+                //The last location in the list is the newest
+                Location location = locationList.get(locationList.size() - 1);
+                Log.i("MapsActivity", "Location: " + location.getLatitude() + " " + location.getLongitude());
+                currentLocation = location;
+                if (currLocationMarker != null) {
+                    currLocationMarker.remove();
+                }
+
+                //Place current location marker
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng);
+                markerOptions.title("Current Position");
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+                currLocationMarker = mapCurr.addMarker(markerOptions);
+
+                //move map camera
+                mapCurr.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
+            }
+        }
+    };
 /*
-    public void btnCurrLocationFloat(View view) {
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(MapsActivity.this);
-        fetchLastLocation();
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    private void checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                new AlertDialog.Builder(this)
+                        .setTitle("Location Permission Needed")
+                        .setMessage("This app needs the Location permission, please accept to use location functionality")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(MapsActivity.this,
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        MY_PERMISSIONS_REQUEST_LOCATION );
+                            }
+                        })
+                        .create()
+                        .show();
 
 
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION );
+            }
+        }
     }*/
+
 }

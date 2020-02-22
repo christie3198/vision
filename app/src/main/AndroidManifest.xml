@@ -22,8 +22,11 @@
         android:roundIcon="@mipmap/vision_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.home.MapsActivity"
-            android:label="Map"></activity>
+        <activity android:name=".ui.Settings.SettingsFragment"></activity>
+        <activity android:name=".ui.Settings.SettingsActivity" />
+        <activity
+            android:name=".ui.home.MapsActivity"
+            android:label="Map" />
         <activity android:name=".ui.gallery.ImagesActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

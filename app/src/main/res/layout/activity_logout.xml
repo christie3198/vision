@@ -31,23 +31,13 @@
         android:textSize="18dp" />
 
     <TextView
-        android:id="@+id/tvGetName"
+        android:id="@+id/tvGetEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
         android:gravity="center"
-        android:text="Username"
         android:textSize="20dp"
         android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/tvGetEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:gravity="center"
-        android:text="Email ID"
-        android:textSize="18dp" />
 
     <Button
         android:id="@+id/bLogout"

@@ -2,6 +2,7 @@ package com.example.signupapp.ui.home;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,8 +29,9 @@ public class HomeFragment extends Fragment {
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), MapsActivity.class);
-                startActivity(intent);
+                Intent i=new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse("geo:19.2199536,72.8485876,17z?hl=en"));
+                startActivity(i);
             }
 
         });

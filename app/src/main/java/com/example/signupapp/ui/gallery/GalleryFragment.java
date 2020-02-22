@@ -110,7 +110,7 @@ public class GalleryFragment extends Fragment {
     private void uploadFile() {
         if (mImageUri != null) {
             StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
-                    + "." + getFileExtension(mImageUri));
+                    + "." + getFileExtension(mImageUri)); //name used to store the file on storage folder
 
             mUploadTask = fileReference.putFile(mImageUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -127,7 +127,7 @@ public class GalleryFragment extends Fragment {
                             result.addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    Log.i("uurl: ", uri.toString());
+                                    Log.i("url: ", uri.toString());
                                     Toast.makeText(getActivity(), "Upload Successful!", Toast.LENGTH_SHORT).show();
                                     Upload upload = new Upload(edChooseImageFile.getText().toString().trim(), uri.toString());
                                     Log.i("uploading: ",upload.getName());
