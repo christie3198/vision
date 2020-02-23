@@ -64,25 +64,32 @@ public class LoginActivity extends AppCompatActivity {
                             if(!task.isSuccessful()){
 
                                 FirebaseUser user = mAuth.getCurrentUser();
-                                //Get user email and uid from auth
-                                String email = user.getEmail();
-                                String uid = user.getUid();
-                                //When user is registered store user info in firebase realtime database too using HashMap
-                                HashMap<Object, String> hashMap = new HashMap<>();
-                                //putting the info in hashmap
-                                hashMap.put("email", email);
-                                hashMap.put("uid", uid);
-                                //will be added later during editting the profile and during the registeration
-                                hashMap.put("name", "");
-                                hashMap.put("phone", "");
-                                hashMap.put("image", "");
 
-                                //firebase database instance
-                                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                //path to store the user data named "Users"
-                                DatabaseReference reference = database.getReference("Users");
-                                //put data within the hashmap in database
-                                reference.child(uid).setValue(hashMap);
+                                //if user is signing in first time then get and show user info from google account
+                                if (task.getResult().getAdditionalUserInfo().isNewUser()){
+
+                                    //Get user email and uid from auth
+                                    String email = user.getEmail();
+                                    String uid = user.getUid();
+                                    //When user is registered store user info in firebase realtime database too using HashMap
+                                    HashMap<Object, String> hashMap = new HashMap<>();
+                                    //putting the info in hashmap
+                                    hashMap.put("email", email);
+                                    hashMap.put("uid", uid);
+                                    //will be added later during editting the profile and during the registeration
+                                    hashMap.put("name", "");
+                                    hashMap.put("phone", "");
+                                    hashMap.put("image", "");
+                                    hashMap.put("cover", "");
+
+                                    //firebase database instance
+                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                    //path to store the user data named "Users"
+                                    DatabaseReference reference = database.getReference("Users");
+                                    //put data within the hashmap in database
+                                    reference.child(uid).setValue(hashMap);
+
+                                }
 
                                 Toast.makeText(LoginActivity.this, "Logging In Unsuccessful! Please try again later...", Toast.LENGTH_LONG).show();
                             }else{

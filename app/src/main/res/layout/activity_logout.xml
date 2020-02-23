@@ -1,61 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:padding="30dp"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".LogoutActivity">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:orientation="vertical"
+        android:padding="30dp"
+        android:layout_height="wrap_content"
+        tools:context=".LogoutActivity">
 
-        <ImageView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="270dp"
-            android:src="@drawable/avatar"
-            android:background="@drawable/image_background"
-            android:padding="40dp"
-            android:layout_centerHorizontal="true"/>
-    </RelativeLayout>
+            android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:gravity="center"
-        android:text="You are logged in as:"
-        android:textSize="18dp" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="270dp"
+                android:src="@drawable/avatar"
+                android:background="@drawable/image_background"
+                android:padding="40dp"
+                android:layout_centerHorizontal="true"/>
+        </RelativeLayout>
 
-    <TextView
-        android:id="@+id/tvGetEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:gravity="center"
-        android:textSize="20dp"
-        android:textStyle="bold" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:text="You are logged in as:"
+            android:textSize="18dp" />
 
-    <Button
-        android:id="@+id/bLogout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/button_background"
-        android:text="Logout"
-        android:textColor="@color/colorWhite"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tvGetEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/bBack"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/button_background"
-        android:text="Back To Main Menu"
-        android:textColor="@color/colorWhite"
-        android:textStyle="bold"/>
-</LinearLayout>
+        <Button
+            android:id="@+id/bLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_background"
+            android:text="Logout"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/bBack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_background"
+            android:text="Back To Main Menu"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"/>
+    </LinearLayout>
+</ScrollView>

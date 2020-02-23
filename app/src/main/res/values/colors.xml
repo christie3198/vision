@@ -7,4 +7,5 @@
     <color name="colorAccentPressed">#092E83</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#FF000000</color>
+    <color name="colorGray">#DADADA</color>
 </resources>

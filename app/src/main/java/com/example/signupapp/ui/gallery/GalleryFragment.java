@@ -168,7 +168,7 @@ public class GalleryFragment extends Fragment {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
             mImageUri = data.getData();
-            Picasso.with(getActivity()).load(mImageUri).into(imageViewer);
+            Picasso.get().load(mImageUri).into(imageViewer);
         } else {
         }
     }

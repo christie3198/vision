@@ -51,7 +51,7 @@ public class ImageAdapter extends Adapter<ImageAdapter.ImageViewHolder> {
         holder.tviewName.setText(mUploads.get(position).getName().toUpperCase());
         if (mUploads.get(position).getImageUrl() != ""){
             Log.i("url: ", mUploads.get(position).getImageUrl());
-            Picasso.with(mContext).load(mUploads.get(position).getImageUrl()).into((holder.uploadedImageViewed));
+            Picasso.get().load(mUploads.get(position).getImageUrl()).into((holder.uploadedImageViewed));
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

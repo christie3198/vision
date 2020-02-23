@@ -54,13 +54,13 @@ public class SignupActivity extends AppCompatActivity {
                     //Toast message here if the Email is empty
                     edEmail.setError("Email Required.");
                     edEmail.requestFocus();
-                } else if (password.length()<=6) {
-                    //Toast message here if the Password is empty
-                    edPassword.setError("Password ust have at least 6 characters.");
-                    edPassword.requestFocus();
                 } else if (password.isEmpty()) {
                     //Toast message here if the Password is empty
                     edPassword.setError("Password Required.");
+                    edPassword.requestFocus();
+                } else if (password.length()<=6) {
+                    //Toast message here if the Password is empty
+                    edPassword.setError("Password ust have at least 7 characters.");
                     edPassword.requestFocus();
                 } else if (cpassword.isEmpty()) {
                     //Toast message ere if the Password is empty
@@ -80,15 +80,17 @@ public class SignupActivity extends AppCompatActivity {
                                         //Get user email and uid from auth
                                         String email = user.getEmail();
                                         String uid = user.getUid();
+                                       // String username = user.getDisplayName();
                                         //When user is registered store user info in firebase realtime database too using HashMap
                                         HashMap<Object, String> hashMap = new HashMap<>();
                                         //putting the info in hashmap
                                         hashMap.put("email", email);
                                         hashMap.put("uid", uid);
-                                        //will be added later during editting the profile and during the registeration
+                                        //will be added later during editing the profile and during the registeration
                                         hashMap.put("name", "");
                                         hashMap.put("phone", "");
                                         hashMap.put("image", "");
+                                        hashMap.put("cover", "");
 
                                         //firebase database instance
                                         FirebaseDatabase database = FirebaseDatabase.getInstance();
